@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flatui="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#e8e8e8"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
+
+    <!-- Dummy item to prevent edit text from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Content is here-->
+            <com.cengalabs.flatui.views.FlatTextView
+                android:id="@+id/title_edittexts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:layout_marginLeft="5dip"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:text="General"
+                android:textSize="20dip"
+                flatui:textColor="main"
+                flatui:theme="@array/grass" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="No. Gardu"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_gardu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Lokasi/Alamat"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Daya (kVA)"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_daya"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Penyulang"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_penyulang"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Konstruksi Tiang"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_tiang"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Tanggal"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:onClick="showDatePicker"
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="none" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3">
+                <com.cengalabs.flatui.views.FlatTextView
+                    android:id="@+id/title_buttons_shape"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dip"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:text="Jam"
+                    android:textSize="16dip"
+                    flatui:textColor="main" />
+                <com.cengalabs.flatui.views.FlatEditText
+                    android:id="@+id/edittext_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip"
+                    android:layout_weight="2"
+                    android:maxLines="1"
+                    android:gravity="center_vertical"
+                    android:hint=""
+                    android:onClick="showTimePicker"
+                    android:includeFontPadding="true"
+                    flatui:fieldStyle="box"
+                    flatui:theme="@array/grass"
+                    android:inputType="number" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
