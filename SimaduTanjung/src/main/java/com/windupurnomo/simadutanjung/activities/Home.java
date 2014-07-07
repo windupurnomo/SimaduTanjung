@@ -1,5 +1,6 @@
 package com.windupurnomo.simadutanjung.activities;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,11 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -32,14 +38,21 @@ import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 
 import com.cengalabs.flatui.FlatUI;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.windupurnomo.simadutanjung.R;
 import com.windupurnomo.simadutanjung.entities.Gardu;
 import com.windupurnomo.simadutanjung.entities.ListAdapterGardu;
 import com.windupurnomo.simadutanjung.server.ServerRequest;
+import com.windupurnomo.simadutanjung.util.NetworkUtil;
 
 public class Home extends Activity implements OnQueryTextListener {
     private static final String TAG = "MainActivity";
+    private static final String PREFS_NAME = "ListGardu";
+    private static final String List_Gardu = "ObjectListGardu";
     private final int APP_THEME = R.array.blood;
+    private SharedPreferences sp;
     private ListView listView;
     private ActionMode actionMode;
     private ActionMode.Callback amCallback;
@@ -52,6 +65,7 @@ public class Home extends Activity implements OnQueryTextListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         FlatUI.initDefaultValues(this);
         FlatUI.setDefaultTheme(APP_THEME);
         setContentView(R.layout.activity_home);
@@ -59,7 +73,6 @@ public class Home extends Activity implements OnQueryTextListener {
         serverRequest = new ServerRequest();
         listView = (ListView) findViewById(R.id.listview_main);
         amCallback = new ActionMode.Callback() {
-
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
@@ -93,11 +106,13 @@ public class Home extends Activity implements OnQueryTextListener {
                         delete();
                         break;
                     case R.id.ctx_day1_gardu:
-                        showMeasurementForm();
+                        showMeasurementForm(1);
                         break;
                     case R.id.ctx_day2_gardu:
+                        showMeasurementForm(2);
                         break;
                     case R.id.ctx_day3_gardu:
+                        showMeasurementForm(3);
                         break;
                     case R.id.ctx_analisis_gardu:
                         Toast.makeText(Home.this, "Analisis", Toast.LENGTH_LONG).show();
@@ -126,11 +141,12 @@ public class Home extends Activity implements OnQueryTextListener {
         startActivity(in);
     }
 
-    private void showMeasurementForm(){
+    private void showMeasurementForm(int number){
         Intent in = new Intent(getBaseContext(), MeasurementActivity.class);
         in.putExtra("theme", APP_THEME);
         in.putExtra("garduNo", selectedList.getNomor());
         in.putExtra("garduId", selectedList.getId());
+        in.putExtra("measurementNumber", number);
         startActivity(in);
     }
 
@@ -178,30 +194,42 @@ public class Home extends Activity implements OnQueryTextListener {
         return super.onOptionsItemSelected(item);
     }
 
-
     private List<Gardu> processResponse(String response){
         List<Gardu> list = new ArrayList<Gardu>();
         try {
             JSONObject jsonObj = new JSONObject(response);
             JSONArray jsonArray = jsonObj.getJSONArray("gardu");
             Log.d(TAG, "data lengths: " + jsonArray.length());
-            Gardu mhs = null;
             SimpleDateFormat ft = new SimpleDateFormat ("yyyy-M-dd hh:mm:ss");
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
-                mhs = new Gardu();
-                mhs.setId(obj.getInt("id"));
-                mhs.setNomor(obj.getString("nomor"));
-                mhs.setAddress(obj.getString("address"));
-                mhs.setDaya(Float.parseFloat(obj.getString("daya")));
-                mhs.setPenyulang(obj.getString("penyulang"));
-                mhs.setTiang(obj.getInt("tiang"));
-                list.add(mhs);
+                Gardu gardu = new Gardu();
+                gardu.setId(obj.getInt("id"));
+                gardu.setNomor(obj.getString("nomor"));
+                gardu.setAddress(obj.getString("address"));
+                gardu.setDaya(Float.parseFloat(obj.getString("daya")));
+                gardu.setPenyulang(obj.getString("penyulang"));
+                gardu.setTiang(obj.getInt("tiang"));
+                list.add(gardu);
             }
+            updateSharedPreference(list);
         } catch (JSONException e) {
             Log.d(TAG, e.getMessage());
         }
         return list;
+    }
+
+    private List<Gardu> processOffLineData(){
+        try {
+            String gardus = sp.getString(List_Gardu, "");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Gardu>>(){}.getType();
+            List<Gardu> garduList = gson.fromJson(gardus, type);
+            return garduList;
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            return new ArrayList<Gardu>();
+        }
     }
 
     private void populateListView(){
@@ -239,13 +267,13 @@ public class Home extends Activity implements OnQueryTextListener {
         });*/
     }
 
-    @Override
+    /*@Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu_gardu, menu);
-    }
+    }*/
 
     private class MainActivityAsync extends AsyncTask<String, Void, String> {
 
@@ -263,9 +291,13 @@ public class Home extends Activity implements OnQueryTextListener {
             if(params[0] == "delete"){
                 serverRequest.sendGetRequest(ServerRequest.urlDelete+"?id="+ Integer.toString(selectedList.getId()));
             }else{
-                /** Mengirimkan request ke server dan memproses JSON response */
-                String response = serverRequest.sendGetRequest(ServerRequest.urlSelectAll);
-                list = processResponse(response);
+                if(NetworkUtil.isNetworkAvailable(Home.this)){
+                    /** Mengirimkan request ke server dan memproses JSON response */
+                    String response = serverRequest.sendGetRequest(ServerRequest.urlSelectAll);
+                    list = processResponse(response);
+                }else{
+                    list = processOffLineData();
+                }
             }
             return null;
         }
@@ -292,5 +324,18 @@ public class Home extends Activity implements OnQueryTextListener {
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
+    }
+
+    private void updateSharedPreference(List<Gardu> gardus){
+        try {
+            Gson gson = new Gson();
+            String jsonGardus = gson.toJson(gardus);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(List_Gardu, jsonGardus);
+            editor.commit();
+            Log.d("TAG","jsonGardus = " + jsonGardus);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

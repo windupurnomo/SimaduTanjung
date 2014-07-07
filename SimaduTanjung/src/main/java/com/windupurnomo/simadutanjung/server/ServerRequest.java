@@ -27,7 +27,7 @@ import com.windupurnomo.simadutanjung.entities.Gardu;
 
 public class ServerRequest {
     private final static String TAG = "ServerRequest";
-    private final String serverUri = "http://simadu.kedainusa.com";
+    private final String serverUri = "http://simadu.kedainusa.com/php";
     public static final String urlSelectAll = "select_all_gardu.php";
     public static final String urlDelete = "delete_gardu.php";
     public static final String urlSubmit = "save_gardu.php";
@@ -64,7 +64,6 @@ public class ServerRequest {
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
-
         return stringBuilder.toString();
     }
 

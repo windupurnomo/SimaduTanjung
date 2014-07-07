@@ -528,7 +528,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rn_a"
+                            android:id="@+id/tegangan_rn_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -550,7 +550,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_sn_a"
+                            android:id="@+id/tegangan_sn_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -572,7 +572,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_tn_a"
+                            android:id="@+id/tegangan_tn_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -594,7 +594,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rs_a"
+                            android:id="@+id/tegangan_rs_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -616,7 +616,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_st_a"
+                            android:id="@+id/tegangan_st_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -638,7 +638,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rt_a"
+                            android:id="@+id/tegangan_rt_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -660,7 +660,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/ujung_tiang_a"
+                            android:id="@+id/ujung_tiang_c"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -691,7 +691,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rn_b"
+                            android:id="@+id/tegangan_rn_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -713,7 +713,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_sn_b"
+                            android:id="@+id/tegangan_sn_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -735,7 +735,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_tn_b"
+                            android:id="@+id/tegangan_tn_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -757,7 +757,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rs_b"
+                            android:id="@+id/tegangan_rs_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -779,7 +779,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_st_b"
+                            android:id="@+id/tegangan_st_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -801,7 +801,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/tegangan_rt_b"
+                            android:id="@+id/tegangan_rt_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
@@ -823,7 +823,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
                         <EditText
-                            android:id="@+id/ujung_tiang_b"
+                            android:id="@+id/ujung_tiang_d"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"

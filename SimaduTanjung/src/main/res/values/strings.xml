@@ -47,8 +47,10 @@
     <string name="hint_daya">Daya (kVA)</string>
     <string name="hint_penyulang">Penyulang</string>
     <string name="hint_tiang">Konstruksi Tiang</string>
+
     <string name="title_activity_detail_gardu">DetailGardu</string>
-    <string name="title_activity_measurement">MeasurementActivity</string>
+    <string name="title_activity_measurement">Pengukuran</string>
     <string name="title_tegangan_ujung">TEGANGAN UJUNG</string>
     <string name="title_tegangan_pangkal">TEGANGAN PANGKAL</string>
+    <string name="title_arus_total">ARUS TOTAL</string>
 </resources>
