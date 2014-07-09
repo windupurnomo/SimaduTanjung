@@ -1,65 +1,91 @@
 package com.windupurnomo.simadutanjung.activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.cengalabs.flatui.FlatUI;
+import com.windupurnomo.simadutanjung.MainActivity;
 import com.windupurnomo.simadutanjung.R;
 import com.windupurnomo.simadutanjung.entities.FragmentDataShare;
+import com.windupurnomo.simadutanjung.entities.Gardu;
 import com.windupurnomo.simadutanjung.entities.MeasurementVariableName;
 import com.windupurnomo.simadutanjung.fragments.FragmentArus;
 import com.windupurnomo.simadutanjung.fragments.FragmentTegangan;
 import com.windupurnomo.simadutanjung.listener.MeasurementTabListener;
+import com.windupurnomo.simadutanjung.server.MeasurementService;
 import com.windupurnomo.simadutanjung.util.NetworkUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MeasurementActivity extends ActionBarActivity {
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+    private static final String TAG = "MeasurementActivity";
     public String PREFS_NAME = "DataMeasurement-";
+    private int theme;
     private SharedPreferences sp;
+    private ProgressDialog progressDialog;
+    private MeasurementService measurementRequest;
+    private FragmentTegangan fragmentTegangan;
+    private FragmentArus fragmentArus;
     private int idGardu;
     private String noGardu;
+    private float daya;
     private int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        int theme = getIntent().getIntExtra("theme", 0);
+        theme = getIntent().getIntExtra("theme", 0);
         idGardu = getIntent().getIntExtra("garduId", 0);
         noGardu = getIntent().getStringExtra("garduNo");
         num = getIntent().getIntExtra("measurementNumber", 0);
-
-        resetFragmentDataShare();
-        setupSharedPreferences();
+        daya = getIntent().getFloatExtra("daya", 0f);
+        FragmentDataShare.procNum = num;
 
         setContentView(R.layout.activity_measurement);
-        getActionBar().setTitle("Pengukuran " + noGardu + " ke-" + num);
+        getActionBar().setTitle("Pengukuran " + noGardu);
         FlatUI.initDefaultValues(this);
         FlatUI.setDefaultTheme(theme);
+        getActionBar().setBackgroundDrawable(FlatUI.getActionBarDrawable(this, theme, false, 2));
 
-        Fragment teganganFragment = new FragmentTegangan();
-        Fragment arusFragment = new FragmentArus();
+        fragmentTegangan = new FragmentTegangan();
+        fragmentArus = new FragmentArus();
 
         // Set up the action bar to show tabs.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         ActionBar.Tab arusTab = actionBar.newTab().setText("Arus")
-                .setTabListener(new MeasurementTabListener(arusFragment, getApplicationContext()));
+                .setTabListener(new MeasurementTabListener(fragmentArus, getApplicationContext()));
         ActionBar.Tab teganganTab = actionBar.newTab().setText("Tegangan")
-                .setTabListener(new MeasurementTabListener(teganganFragment, getApplicationContext()));
+                .setTabListener(new MeasurementTabListener(fragmentTegangan, getApplicationContext()));
 
         // for each of the sections in the app, add a tab to the action bar.
         actionBar.addTab(arusTab);
         actionBar.addTab(teganganTab);
+
+        resetFragmentDataShare();
+        measurementRequest = new MeasurementService();
+        new MeasurementActivityAsync().execute("load");
     }
 
     @Override
@@ -91,35 +117,64 @@ public class MeasurementActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        //save in preference
-        if (id == R.id.option_menu_save){
-            String content = "Save Pressed.\nPhase-R: " + FragmentDataShare.phaseR;
-            content += "\nNetral-NH-A: " + FragmentDataShare.netralNhA;
-            content += "\nUjung Tiang A: " +FragmentDataShare.tiangUjungA;
-            content += "\nRN: " + FragmentDataShare.rn;
-            Toast.makeText(this, content , Toast.LENGTH_LONG).show();
-            SharedPreferences.Editor editor = sp.edit();
-            saveDataToSharedPref(editor);
-            editor.putBoolean(MeasurementVariableName.dataStatus, true);
-            editor.commit();
-            goToHomeActivity();
-        }
+        try {
+            if (id == R.id.action_settings) {
+                return true;
+            }
 
-        //publish to internet
-        if (id == R.id.option_menu_publish){
-            SharedPreferences.Editor editor = sp.edit();
-            resetSharePref(editor);
-            editor.putString(MeasurementVariableName.garduName, noGardu);
-            editor.putBoolean(MeasurementVariableName.dataStatus, false);
-            editor.commit();
-            goToHomeActivity();
-        }
+            if (id == R.id.option_menu_analisis){
+                Intent in = new Intent(getApplicationContext(), MeasurementAnalysis.class);
+                in.putExtra("daya", daya);
+                in.putExtra("garduNo", noGardu);
+                in.putExtra("theme", theme);
+                startActivity(in);
+            }
 
-        if (id == R.id.home){
-            goToHomeActivity();
+            //save in preference
+            if (id == R.id.option_menu_save){
+                FragmentDataShare.measurementDate = new Date();
+                SharedPreferences.Editor editor = sp.edit();
+                saveDataToSharedPref(editor);
+                editor.putBoolean(MeasurementVariableName.dataStatus, true);
+                editor.commit();
+                Toast.makeText(this, "Saving to local storage" , Toast.LENGTH_LONG).show();
+                goToHomeActivity();
+            }
+
+            //upload to internet
+            if (id == R.id.option_menu_upload){
+                Date measDate = FragmentDataShare.measurementDate;
+                FragmentDataShare.measurementDate = measDate == null ? new Date() : measDate;
+                FragmentDataShare.status = 1;
+                new MeasurementActivityAsync().execute("submit");
+            }
+
+            //publish to internet
+            if (id == R.id.option_menu_publish){
+                Date measDate = FragmentDataShare.measurementDate;
+                FragmentDataShare.measurementDate = measDate == null ? new Date() : measDate;
+                FragmentDataShare.status = 2;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Publish gardu " + noGardu +"? Process ini akan mengakhiri pengukuran untuk gardu " + noGardu + ".");
+                builder.setTitle("Publish");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        new MeasurementActivityAsync().execute("submit");
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.setIcon(R.drawable.ic_action_web_site);
+                alert.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -135,10 +190,9 @@ public class MeasurementActivity extends ActionBarActivity {
         PREFS_NAME += noGardu + num;
         sp = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean isThereDataLocal = sp.getBoolean(MeasurementVariableName.dataStatus, false);
-        if(NetworkUtil.isNetworkAvailable(this)) {
-            //it's mean there are no data on shared preferences
-            //so we will get data from server
-            FragmentDataShare.phaseR = 999f;
+        if(!isThereDataLocal && NetworkUtil.isNetworkAvailable(this)) {
+            String response = measurementRequest.sendGetRequest(MeasurementService.urlSelectAll + "?gardu="+idGardu);
+            processMeasurementResponse(response);
         }else{
             FragmentDataShare.phaseR = sp.getFloat(MeasurementVariableName.phaseR, 0f);
             FragmentDataShare.phaseS = sp.getFloat(MeasurementVariableName.phaseS, 0f);
@@ -474,5 +528,166 @@ public class MeasurementActivity extends ActionBarActivity {
         FragmentDataShare.stD = 0f;
         FragmentDataShare.rtD = 0f;
         FragmentDataShare.tiangUjungD = "";
+    }
+
+    private void initFragmentDataShare(JSONObject obj) {
+        try {
+            FragmentDataShare.id = obj.getInt("id");
+            FragmentDataShare.garduId = idGardu;// obj.getInt("gardu_id");
+            FragmentDataShare.batch = obj.getInt("batch");
+            FragmentDataShare.procNum = obj.getInt("proc_num");
+            FragmentDataShare.status = obj.getInt("status");
+            FragmentDataShare.phaseR = (float)obj.getDouble("phase_r");
+            FragmentDataShare.phaseS = (float)obj.getDouble("phase_s");
+            FragmentDataShare.phaseT = (float)obj.getDouble("phase_t");
+            FragmentDataShare.netral = (float)obj.getDouble("netral");
+            FragmentDataShare.phaseRNhA = (float)obj.getDouble("phase_r_nh_a");
+            FragmentDataShare.phaseSNhA = (float)obj.getDouble("phase_s_nh_a");
+            FragmentDataShare.phaseTNhA = (float)obj.getDouble("phase_t_nh_a");
+            FragmentDataShare.netralNhA = (float)obj.getDouble("netral_nh_a");
+            FragmentDataShare.phaseRBebanA = (float)obj.getDouble("phase_r_beban_a");
+            FragmentDataShare.phaseSBebanA = (float)obj.getDouble("phase_s_beban_a");
+            FragmentDataShare.phaseTBebanA = (float)obj.getDouble("phase_t_beban_a");
+            FragmentDataShare.netralBebanA = (float)obj.getDouble("netral_beban_a");
+            FragmentDataShare.phaseRNhB = (float)obj.getDouble("phase_r_nh_b");
+            FragmentDataShare.phaseSNhB = (float)obj.getDouble("phase_s_nh_b");
+            FragmentDataShare.phaseTNhB = (float)obj.getDouble("phase_t_nh_b");
+            FragmentDataShare.netralNhB = (float)obj.getDouble("netral_nh_b");
+            FragmentDataShare.phaseRBebanB = (float)obj.getDouble("phase_r_beban_b");
+            FragmentDataShare.phaseSBebanB = (float)obj.getDouble("phase_s_beban_b");
+            FragmentDataShare.phaseTBebanB = (float)obj.getDouble("phase_t_beban_b");
+            FragmentDataShare.netralBebanB = (float)obj.getDouble("netral_beban_b");
+            FragmentDataShare.phaseRNhC = (float)obj.getDouble("phase_r_nh_c");
+            FragmentDataShare.phaseSNhC = (float)obj.getDouble("phase_s_nh_c");
+            FragmentDataShare.phaseTNhC = (float)obj.getDouble("phase_t_nh_c");
+            FragmentDataShare.netralNhC = (float)obj.getDouble("netral_nh_c");
+            FragmentDataShare.phaseRBebanC = (float)obj.getDouble("phase_r_beban_c");
+            FragmentDataShare.phaseSBebanC = (float)obj.getDouble("phase_s_beban_c");
+            FragmentDataShare.phaseTBebanC = (float)obj.getDouble("phase_t_beban_c");
+            FragmentDataShare.netralBebanC = (float)obj.getDouble("netral_beban_c");
+            FragmentDataShare.phaseRNhD = (float)obj.getDouble("phase_r_nh_d");
+            FragmentDataShare.phaseSNhD = (float)obj.getDouble("phase_s_nh_d");
+            FragmentDataShare.phaseTNhD = (float)obj.getDouble("phase_t_nh_d");
+            FragmentDataShare.netralNhD = (float)obj.getDouble("netral_nh_d");
+            FragmentDataShare.phaseRBebanD = (float)obj.getDouble("phase_r_beban_d");
+            FragmentDataShare.phaseSBebanD = (float)obj.getDouble("phase_s_beban_d");
+            FragmentDataShare.phaseTBebanD = (float)obj.getDouble("phase_t_beban_d");
+            FragmentDataShare.netralBebanD = (float)obj.getDouble("netral_beban_d");
+
+            /*Tegangan*/
+            FragmentDataShare.rn = (float)obj.getDouble("rn");
+            FragmentDataShare.sn = (float)obj.getDouble("sn");
+            FragmentDataShare.tn = (float)obj.getDouble("tn");
+            FragmentDataShare.rs = (float)obj.getDouble("rs");
+            FragmentDataShare.st = (float)obj.getDouble("st");
+            FragmentDataShare.rt = (float)obj.getDouble("rt");
+            FragmentDataShare.rnA = (float)obj.getDouble("rn_a");
+            FragmentDataShare.snA = (float)obj.getDouble("sn_a");
+            FragmentDataShare.tnA = (float)obj.getDouble("tn_a");
+            FragmentDataShare.rsA = (float)obj.getDouble("rs_a");
+            FragmentDataShare.stA = (float)obj.getDouble("st_a");
+            FragmentDataShare.rtA = (float)obj.getDouble("rt_a");
+            FragmentDataShare.tiangUjungA = obj.getString("tiangujung_a");
+            FragmentDataShare.rnB = (float)obj.getDouble("rn_b");
+            FragmentDataShare.snB = (float)obj.getDouble("sn_b");
+            FragmentDataShare.tnB = (float)obj.getDouble("tn_b");
+            FragmentDataShare.rsB = (float)obj.getDouble("rs_b");
+            FragmentDataShare.stB = (float)obj.getDouble("st_b");
+            FragmentDataShare.rtB = (float)obj.getDouble("rt_b");
+            FragmentDataShare.tiangUjungB = obj.getString("tiangujung_b");
+            FragmentDataShare.rnC = (float)obj.getDouble("rn_c");
+            FragmentDataShare.snC = (float)obj.getDouble("sn_c");
+            FragmentDataShare.tnC = (float)obj.getDouble("tn_c");
+            FragmentDataShare.rsC = (float)obj.getDouble("rs_c");
+            FragmentDataShare.stC = (float)obj.getDouble("st_c");
+            FragmentDataShare.rtC = (float)obj.getDouble("rt_c");
+            FragmentDataShare.tiangUjungC = obj.getString("tiangujung_c");
+            FragmentDataShare.rnD = (float)obj.getDouble("rn_d");
+            FragmentDataShare.snD = (float)obj.getDouble("sn_d");
+            FragmentDataShare.tnD = (float)obj.getDouble("tn_d");
+            FragmentDataShare.rsD = (float)obj.getDouble("rs_d");
+            FragmentDataShare.stD = (float)obj.getDouble("st_d");
+            FragmentDataShare.rtD = (float)obj.getDouble("rt_d");
+            FragmentDataShare.tiangUjungD = obj.getString("tiangujung_d");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processMeasurementResponse(String response){
+        try {
+            JSONObject jsonObj = new JSONObject(response);
+            JSONArray jsonArray = jsonObj.getJSONArray("gardu");
+            Log.d(TAG, "data lengths: " + jsonArray.length());
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-M-dd hh:mm:ss");
+            for(int i = 0; i < jsonArray.length(); i++){
+                JSONObject obj = jsonArray.getJSONObject(i);
+                initFragmentDataShare(obj);
+            }
+        } catch (JSONException e) {
+            FragmentDataShare.garduId = idGardu;
+            Log.d(TAG, e.getMessage());
+        }
+    }
+
+    private void responseSubmit(String resultRequest){
+        int replyCode = 200;
+        if(resultRequest.length() > 2)
+            Toast.makeText(this, "Result Request: " + resultRequest, Toast.LENGTH_LONG).show();
+        if (replyCode == 99) {
+            Toast.makeText(MeasurementActivity.this, "Upload to internet failed.", Toast.LENGTH_LONG).show();
+        } else if (replyCode == 200) {
+            SharedPreferences.Editor editor = sp.edit();
+            resetSharePref(editor);
+            editor.putString(MeasurementVariableName.garduName, noGardu);
+            editor.putBoolean(MeasurementVariableName.dataStatus, false);
+            editor.commit();
+            Toast.makeText(MeasurementActivity.this, "Saving to internet.\nLocal storage will be deleted." , Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(MeasurementActivity.this, "Upload Gagal. Code: " +replyCode , Toast.LENGTH_LONG).show();
+        }
+        goToHomeActivity();
+    }
+
+
+    private class MeasurementActivityAsync extends AsyncTask<String, Void, String> {
+        private String processType;
+        private int replyCode;
+        private String resultRequest;
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(MeasurementActivity.this);
+            progressDialog.setMessage("retrieving...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            processType = params[0];
+            if(params[0] == "submit"){
+                resultRequest = measurementRequest.sendPostRequest(MeasurementService.urlSubmit);
+            }else{
+                setupSharedPreferences();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (processType == "submit") {
+                        responseSubmit(resultRequest);
+                    } else {
+                        fragmentArus.dataInitialization();
+                    }
+                }
+            });
+        }
+
     }
 }

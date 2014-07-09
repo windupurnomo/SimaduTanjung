@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.cengalabs.flatui.FlatUI;
 import com.windupurnomo.simadutanjung.R;
+import com.windupurnomo.simadutanjung.entities.CommonResponse;
 import com.windupurnomo.simadutanjung.entities.Gardu;
 import com.windupurnomo.simadutanjung.server.ServerRequest;
 
@@ -21,11 +25,14 @@ import org.apache.http.HttpStatus;
 public class FormGardu extends ActionBarActivity {
     private EditText textNomor, textAddress, textDaya, textPenyulang;
     private RadioGroup radioTiangGroup;
+    private final int APP_THEME = R.array.blood;
     private RadioButton radioTiang, radio1Tiang, radio2Tiang;
     private ProgressDialog progressDialog;
     private ServerRequest server;
     private int replyCode;
     private Gardu gardu;
+    private int theme;
+    private int tiang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,10 @@ public class FormGardu extends ActionBarActivity {
         server = new ServerRequest();
         android.app.ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        theme = getIntent().getIntExtra("theme", APP_THEME);
+        FlatUI.initDefaultValues(this);
+        FlatUI.setDefaultTheme(theme);
+        getActionBar().setBackgroundDrawable(FlatUI.getActionBarDrawable(this, theme, false, 2));
         gardu = new Gardu();
         if(getIntent().hasExtra("id")){
             int id = getIntent().getIntExtra("id", 0);
@@ -47,11 +58,18 @@ public class FormGardu extends ActionBarActivity {
             textAddress.setText(address);
             textDaya.setText(Float.toString(daya));
             textPenyulang.setText(penyulang);
-            if(tiang == 1) radio1Tiang.setSelected(true);
-            else radio2Tiang.setSelected(true);
-            gardu.setId(Integer.valueOf(id));
+            if(tiang == 1) {
+                radio1Tiang.setChecked(true);
+                radio2Tiang.setChecked(false);
+            }
+            else{
+                radio1Tiang.setChecked(false);
+                radio2Tiang.setChecked(true);
+            }
+            gardu.setId(id);
         }else{
             gardu.setId(0);
+            radio1Tiang.setChecked(true);
         }
     }
 
@@ -63,8 +81,6 @@ public class FormGardu extends ActionBarActivity {
         radioTiangGroup = (RadioGroup)findViewById(R.id.radioTiangForm);
         radio1Tiang = (RadioButton)findViewById(R.id.radio1TiangForm);
         radio2Tiang = (RadioButton)findViewById(R.id.radio2TiangForm);
-        radio1Tiang.setSelected(true);
-        radio2Tiang.setSelected(false);
     }
 
     @Override
@@ -79,6 +95,23 @@ public class FormGardu extends ActionBarActivity {
         startActivity(in);
     }
 
+    public void onRadioClick(View view){
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio1TiangForm:
+                if (checked)
+                    tiang = 1;
+                    break;
+            case R.id.radio2TiangForm:
+                if (checked)
+                    tiang = 2;
+                    break;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
@@ -86,7 +119,7 @@ public class FormGardu extends ActionBarActivity {
                 goToHomeActivity();
                 break;
 
-            case R.id.option_menu_save:
+            case R.id.option_menu_save_gardu:
                 if(textNomor.getText().toString().trim().isEmpty() || textAddress.getText().toString().trim().isEmpty()){
                     Toast.makeText(getApplicationContext(), "Nomor gardu tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 }else{
@@ -103,20 +136,17 @@ public class FormGardu extends ActionBarActivity {
             String address = textAddress.getText().toString();
             float daya = Float.parseFloat(textDaya.getText().toString());
             String penyulang = textPenyulang.getText().toString();
-            int idSelected = radioTiangGroup.getCheckedRadioButtonId();
-            int tiang = 1;
-            if(idSelected == R.id.radio1Tiang) tiang = 1;
-            else if(idSelected == R.id.radio2Tiang) tiang = 2;
-            else tiang = 0;
             gardu.setNomor(nomor);
             gardu.setAddress(address);
             gardu.setDaya(daya);
             gardu.setPenyulang(penyulang);
             gardu.setTiang(tiang);
             /**Mengirimkan POST reques*/
-            replyCode = server.sendPostRequest(gardu, ServerRequest.urlSubmit);
+            CommonResponse cr = server.sendPostRequest(gardu, ServerRequest.urlSubmit);
+            replyCode = (Integer)cr.getData();
+            Log.d("FormGardu", cr.getMessage());
         }catch (Exception ex){
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("FormGardu", ex.getMessage());
         }
     }
 

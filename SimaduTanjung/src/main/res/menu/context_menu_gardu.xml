@@ -2,9 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/ctx_edit_gardu" android:title="Edit"/>
     <item android:id="@+id/ctx_delete_gardu" android:title="Delete"/>
+    <item android:id="@+id/ctx_measurement" android:title="Pengukuran"/>
+    <!--<item android:id="@+id/ctx_edit_gardu" android:title="Edit"/>
+    <item android:id="@+id/ctx_delete_gardu" android:title="Delete"/>
     <item android:id="@+id/ctx_day1_gardu" android:title="Data Hari ke-1"/>
     <item android:id="@+id/ctx_day2_gardu" android:title="Data Hari ke-2"/>
     <item android:id="@+id/ctx_day3_gardu" android:title="Data Hari ke-3"/>
     <item android:id="@+id/ctx_analisis_gardu" android:title="Analisis Harian"/>
-    <item android:id="@+id/ctx_analisis_gardu3" android:title="Analisis 3 Hari"/>
+    <item android:id="@+id/ctx_analisis_gardu3" android:title="Analisis 3 Hari"/>-->
 </menu>

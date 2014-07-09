@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.windupurnomo.simadutanjung.R;
 import com.windupurnomo.simadutanjung.activities.MeasurementActivity;
@@ -53,7 +54,7 @@ public class FragmentTegangan extends Fragment {
         rsC = (EditText) rootView.findViewById(R.id.tegangan_rs_c);
         stC = (EditText) rootView.findViewById(R.id.tegangan_st_c);
         rtC = (EditText) rootView.findViewById(R.id.tegangan_rt_c);
-        tiangUjungC = (EditText) rootView.findViewById(R.id.ujung_tiang_b);
+        tiangUjungC = (EditText) rootView.findViewById(R.id.ujung_tiang_c);
 
         rnD = (EditText) rootView.findViewById(R.id.tegangan_rn_d);
         snD = (EditText) rootView.findViewById(R.id.tegangan_sn_d);
@@ -62,48 +63,6 @@ public class FragmentTegangan extends Fragment {
         stD = (EditText) rootView.findViewById(R.id.tegangan_st_d);
         rtD = (EditText) rootView.findViewById(R.id.tegangan_rt_d);
         tiangUjungD = (EditText) rootView.findViewById(R.id.ujung_tiang_d);
-
-
-        /* Inisiasi Data */
-        rn.setText(Float.toString(FragmentDataShare.rn));
-        sn.setText(Float.toString(FragmentDataShare.sn));
-        tn.setText(Float.toString(FragmentDataShare.tn));
-        rs.setText(Float.toString(FragmentDataShare.rs));
-        st.setText(Float.toString(FragmentDataShare.st));
-        rt.setText(Float.toString(FragmentDataShare.rt));
-
-        rnA.setText(Float.toString(FragmentDataShare.rnA));
-        snA.setText(Float.toString(FragmentDataShare.snA));
-        tnA.setText(Float.toString(FragmentDataShare.tnA));
-        rsA.setText(Float.toString(FragmentDataShare.rsA));
-        stA.setText(Float.toString(FragmentDataShare.stA));
-        rtA.setText(Float.toString(FragmentDataShare.rtA));
-        tiangUjungA.setText(FragmentDataShare.tiangUjungA);
-
-        rnB.setText(Float.toString(FragmentDataShare.rnB));
-        snB.setText(Float.toString(FragmentDataShare.snB));
-        tnB.setText(Float.toString(FragmentDataShare.tnB));
-        rsB.setText(Float.toString(FragmentDataShare.rsB));
-        stB.setText(Float.toString(FragmentDataShare.stB));
-        rtB.setText(Float.toString(FragmentDataShare.rtB));
-        tiangUjungB.setText(FragmentDataShare.tiangUjungB);
-
-        rnC.setText(Float.toString(FragmentDataShare.rnC));
-        snC.setText(Float.toString(FragmentDataShare.snC));
-        tnC.setText(Float.toString(FragmentDataShare.tnC));
-        rsC.setText(Float.toString(FragmentDataShare.rsC));
-        stC.setText(Float.toString(FragmentDataShare.stC));
-        rtC.setText(Float.toString(FragmentDataShare.rtC));
-        tiangUjungC.setText(FragmentDataShare.tiangUjungC);
-
-        rnD.setText(Float.toString(FragmentDataShare.rnD));
-        snD.setText(Float.toString(FragmentDataShare.snD));
-        tnD.setText(Float.toString(FragmentDataShare.tnD));
-        rsD.setText(Float.toString(FragmentDataShare.rsD));
-        stD.setText(Float.toString(FragmentDataShare.stD));
-        rtD.setText(Float.toString(FragmentDataShare.rtD));
-        tiangUjungD.setText(FragmentDataShare.tiangUjungD);
-        
 
         /* Add Listener */
         rn.addTextChangedListener(twRn);
@@ -145,7 +104,7 @@ public class FragmentTegangan extends Fragment {
         rtD.addTextChangedListener(twRtD);
         tiangUjungD.addTextChangedListener(twTiangUjungD);
         
-
+        dataInitialization();
         return rootView;
     }
 
@@ -155,6 +114,52 @@ public class FragmentTegangan extends Fragment {
             rnC, snC, tnC, rsC, stC, rtC, tiangUjungC,
             rnD, snD, tnD, rsD, stD, rtD, tiangUjungD;
 
+
+    public void dataInitialization(){
+        /* Inisiasi Data */
+        try {
+            rn.setText(Float.toString(FragmentDataShare.rn));
+            sn.setText(Float.toString(FragmentDataShare.sn));
+            tn.setText(Float.toString(FragmentDataShare.tn));
+            rs.setText(Float.toString(FragmentDataShare.rs));
+            st.setText(Float.toString(FragmentDataShare.st));
+            rt.setText(Float.toString(FragmentDataShare.rt));
+
+            rnA.setText(Float.toString(FragmentDataShare.rnA));
+            snA.setText(Float.toString(FragmentDataShare.snA));
+            tnA.setText(Float.toString(FragmentDataShare.tnA));
+            rsA.setText(Float.toString(FragmentDataShare.rsA));
+            stA.setText(Float.toString(FragmentDataShare.stA));
+            rtA.setText(Float.toString(FragmentDataShare.rtA));
+            tiangUjungA.setText(FragmentDataShare.tiangUjungA);
+
+            rnB.setText(Float.toString(FragmentDataShare.rnB));
+            snB.setText(Float.toString(FragmentDataShare.snB));
+            tnB.setText(Float.toString(FragmentDataShare.tnB));
+            rsB.setText(Float.toString(FragmentDataShare.rsB));
+            stB.setText(Float.toString(FragmentDataShare.stB));
+            rtB.setText(Float.toString(FragmentDataShare.rtB));
+            tiangUjungB.setText(FragmentDataShare.tiangUjungB);
+
+            rnC.setText(Float.toString(FragmentDataShare.rnC));
+            snC.setText(Float.toString(FragmentDataShare.snC));
+            tnC.setText(Float.toString(FragmentDataShare.tnC));
+            rsC.setText(Float.toString(FragmentDataShare.rsC));
+            stC.setText(Float.toString(FragmentDataShare.stC));
+            rtC.setText(Float.toString(FragmentDataShare.rtC));
+            tiangUjungC.setText(FragmentDataShare.tiangUjungC);
+
+            rnD.setText(Float.toString(FragmentDataShare.rnD));
+            snD.setText(Float.toString(FragmentDataShare.snD));
+            tnD.setText(Float.toString(FragmentDataShare.tnD));
+            rsD.setText(Float.toString(FragmentDataShare.rsD));
+            stD.setText(Float.toString(FragmentDataShare.stD));
+            rtD.setText(Float.toString(FragmentDataShare.rtD));
+            tiangUjungD.setText(FragmentDataShare.tiangUjungD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     TextWatcher twRn = new TextWatcher() {
 
@@ -255,7 +260,7 @@ public class FragmentTegangan extends Fragment {
         public void afterTextChanged(Editable s) {
             try {
                 String sss = s.toString();
-                FragmentDataShare.rnC = Float.parseFloat(sss);
+                FragmentDataShare.rnA = Float.parseFloat(sss);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }

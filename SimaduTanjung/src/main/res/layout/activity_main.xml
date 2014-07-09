@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e8e8e8"
+    android:background="#ffffff"
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
 
@@ -20,7 +20,7 @@
             android:layout_centerInParent="true"
             android:id="@+id/imageView"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_main_big" />
         <com.cengalabs.flatui.views.FlatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_centerInParent="true"
-            android:text="STO OJT PT. PLN (PERSERO)\nANGKATAN 40"
+            android:text="STO OJT PT. PLN (PERSERO)\nS1/D3 ANGKATAN 40"
             android:id="@+id/textView"
             android:layout_marginTop="30dp" />
 
@@ -61,7 +61,7 @@
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_centerInParent="true"
-            android:text="Diajukan Oleh:\nBAYU ARIE WIBOWO\nAGUNG PRIYATNO"
+            android:text="Diajukan Oleh:\nBAYU ARIE WIBOWO (YGY1113/DS/S1/ELE/0015)\nAGUNG PRIYATNO (PLM0913/JF/D3/ELE/242)"
             android:id="@+id/textView"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"/>

@@ -219,11 +219,13 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible" />
                 <TextView
                     android:text="@string/title_arus_satuan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"/>
                 <EditText
                     android:id="@+id/netral_beban_a"
                     android:layout_weight="1"
@@ -357,11 +359,13 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
                 <TextView
                     android:text="@string/title_arus_satuan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"/>
                 <EditText
                     android:id="@+id/netral_beban_b"
                     android:layout_weight="1"
@@ -495,11 +499,13 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
                 <TextView
                     android:text="@string/title_arus_satuan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"/>
                 <EditText
                     android:id="@+id/netral_beban_c"
                     android:layout_weight="1"
@@ -632,11 +638,13 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:visibility="invisible"/>
                 <TextView
                     android:text="@string/title_arus_satuan"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"/>
                 <EditText
                     android:id="@+id/netral_beban_d"
                     android:layout_weight="1"

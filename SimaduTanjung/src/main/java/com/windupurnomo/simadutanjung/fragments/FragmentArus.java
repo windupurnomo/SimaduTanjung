@@ -18,6 +18,16 @@ import com.windupurnomo.simadutanjung.entities.FragmentDataShare;
  */
 public class FragmentArus extends android.support.v4.app.Fragment{
 
+    private EditText phaseR, phaseS, phaseT, netral,
+            phaseRNhA, phaseSNhA, phaseTNhA, netralNhA,
+            phaseRNhB, phaseSNhB, phaseTNhB, netralNhB,
+            phaseRNhC, phaseSNhC, phaseTNhC, netralNhC,
+            phaseRNhD, phaseSNhD, phaseTNhD, netralNhD,
+            phaseRBebanA, phaseSBebanA, phaseTBebanA, netralBebanA,
+            phaseRBebanB, phaseSBebanB, phaseTBebanB, netralBebanB,
+            phaseRBebanC, phaseSBebanC, phaseTBebanC, netralBebanC,
+            phaseRBebanD, phaseSBebanD, phaseTBebanD, netralBebanD;
+
     public FragmentArus() {
     }
 
@@ -69,7 +79,58 @@ public class FragmentArus extends android.support.v4.app.Fragment{
         phaseSBebanD = (EditText) rootView.findViewById(R.id.phase_s_beban_d);
         phaseTBebanD = (EditText) rootView.findViewById(R.id.phase_t_beban_d);
         netralBebanD = (EditText) rootView.findViewById(R.id.netral_beban_d);
-        
+
+        /* Add Listener*/
+        phaseR.addTextChangedListener(twPhaseR);
+        phaseS.addTextChangedListener(twPhaseS);
+        phaseT.addTextChangedListener(twPhaseT);
+        netral.addTextChangedListener(twNetral);
+
+        phaseRNhA.addTextChangedListener(twPhaseRNhA);
+        phaseSNhA.addTextChangedListener(twPhaseSNhA);
+        phaseTNhA.addTextChangedListener(twPhaseTNhA);
+        netralNhA.addTextChangedListener(twNetralNhA);
+
+        phaseRNhB.addTextChangedListener(twPhaseRNhB);
+        phaseSNhB.addTextChangedListener(twPhaseSNhB);
+        phaseTNhB.addTextChangedListener(twPhaseTNhB);
+        netralNhB.addTextChangedListener(twNetralNhB);
+
+        phaseRNhC.addTextChangedListener(twPhaseRNhC);
+        phaseSNhC.addTextChangedListener(twPhaseSNhC);
+        phaseTNhC.addTextChangedListener(twPhaseTNhC);
+        netralNhC.addTextChangedListener(twNetralNhC);
+
+        phaseRNhD.addTextChangedListener(twPhaseRNhD);
+        phaseSNhD.addTextChangedListener(twPhaseSNhD);
+        phaseTNhD.addTextChangedListener(twPhaseTNhD);
+        netralNhD.addTextChangedListener(twNetralNhD);
+
+        phaseRBebanA.addTextChangedListener(twPhaseRBebanA);
+        phaseSBebanA.addTextChangedListener(twPhaseSBebanA);
+        phaseTBebanA.addTextChangedListener(twPhaseTBebanA);
+        netralBebanA.addTextChangedListener(twNetralBebanA);
+
+        phaseRBebanB.addTextChangedListener(twPhaseRBebanB);
+        phaseSBebanB.addTextChangedListener(twPhaseSBebanB);
+        phaseTBebanB.addTextChangedListener(twPhaseTBebanB);
+        netralBebanB.addTextChangedListener(twNetralBebanB);
+
+        phaseRBebanC.addTextChangedListener(twPhaseRBebanC);
+        phaseSBebanC.addTextChangedListener(twPhaseSBebanC);
+        phaseTBebanC.addTextChangedListener(twPhaseTBebanC);
+        netralBebanC.addTextChangedListener(twNetralBebanC);
+
+        phaseRBebanD.addTextChangedListener(twPhaseRBebanD);
+        phaseSBebanD.addTextChangedListener(twPhaseSBebanD);
+        phaseTBebanD.addTextChangedListener(twPhaseTBebanD);
+        netralBebanD.addTextChangedListener(twNetralBebanD);
+
+        dataInitialization();
+        return rootView;
+    }
+
+    public void dataInitialization(){
         /*inisialisasi data*/
         phaseR.setText(Float.toString(FragmentDataShare.phaseR));
         phaseS.setText(Float.toString(FragmentDataShare.phaseS));
@@ -115,65 +176,7 @@ public class FragmentArus extends android.support.v4.app.Fragment{
         phaseSBebanD.setText(Float.toString(FragmentDataShare.phaseSBebanD));
         phaseTBebanD.setText(Float.toString(FragmentDataShare.phaseTBebanD));
         netralBebanD.setText(Float.toString(FragmentDataShare.netralBebanD));
-
-        /* Add Listener*/
-        phaseR.addTextChangedListener(twPhaseR);
-        phaseS.addTextChangedListener(twPhaseS);
-        phaseT.addTextChangedListener(twPhaseT);
-        netral.addTextChangedListener(twNetral);
-
-        phaseRNhA.addTextChangedListener(twPhaseRNhA);
-        phaseSNhA.addTextChangedListener(twPhaseSNhA);
-        phaseTNhA.addTextChangedListener(twPhaseTNhA);
-        netralNhA.addTextChangedListener(twNetralNhA);
-
-        phaseRNhB.addTextChangedListener(twPhaseRNhB);
-        phaseSNhB.addTextChangedListener(twPhaseSNhB);
-        phaseTNhB.addTextChangedListener(twPhaseTNhB);
-        netralNhB.addTextChangedListener(twNetralNhB);
-
-        phaseRNhC.addTextChangedListener(twPhaseRNhC);
-        phaseSNhC.addTextChangedListener(twPhaseSNhC);
-        phaseTNhC.addTextChangedListener(twPhaseTNhC);
-        netralNhC.addTextChangedListener(twNetralNhC);
-
-        phaseRNhA.addTextChangedListener(twPhaseRNhD);
-        phaseSNhA.addTextChangedListener(twPhaseSNhD);
-        phaseTNhA.addTextChangedListener(twPhaseTNhD);
-        netralNhA.addTextChangedListener(twNetralNhD);
-
-        phaseRBebanA.addTextChangedListener(twPhaseRBebanA);
-        phaseSBebanA.addTextChangedListener(twPhaseSBebanA);
-        phaseTBebanA.addTextChangedListener(twPhaseTBebanA);
-        netralBebanA.addTextChangedListener(twNetralBebanA);
-
-        phaseRBebanB.addTextChangedListener(twPhaseRBebanB);
-        phaseSBebanB.addTextChangedListener(twPhaseSBebanB);
-        phaseTBebanB.addTextChangedListener(twPhaseTBebanB);
-        netralBebanB.addTextChangedListener(twNetralBebanB);
-
-        phaseRBebanC.addTextChangedListener(twPhaseRBebanC);
-        phaseSBebanC.addTextChangedListener(twPhaseSBebanC);
-        phaseTBebanC.addTextChangedListener(twPhaseTBebanC);
-        netralBebanC.addTextChangedListener(twNetralBebanC);
-
-        phaseRBebanA.addTextChangedListener(twPhaseRBebanD);
-        phaseSBebanA.addTextChangedListener(twPhaseSBebanD);
-        phaseTBebanA.addTextChangedListener(twPhaseTBebanD);
-        netralBebanA.addTextChangedListener(twNetralBebanD);
-
-        return rootView;
     }
-
-    private EditText phaseR, phaseS, phaseT, netral,
-            phaseRNhA, phaseSNhA, phaseTNhA, netralNhA,
-            phaseRNhB, phaseSNhB, phaseTNhB, netralNhB,
-            phaseRNhC, phaseSNhC, phaseTNhC, netralNhC,
-            phaseRNhD, phaseSNhD, phaseTNhD, netralNhD,
-            phaseRBebanA, phaseSBebanA, phaseTBebanA, netralBebanA,
-            phaseRBebanB, phaseSBebanB, phaseTBebanB, netralBebanB,
-            phaseRBebanC, phaseSBebanC, phaseTBebanC, netralBebanC,
-            phaseRBebanD, phaseSBebanD, phaseTBebanD, netralBebanD;
 
     TextWatcher twPhaseR = new TextWatcher() {
 
@@ -652,8 +655,12 @@ public class FragmentArus extends android.support.v4.app.Fragment{
     TextWatcher twPhaseTBebanC = new TextWatcher() {
 
         public void afterTextChanged(Editable s) {
-            String sss = s.toString();
-            FragmentDataShare.phaseTBebanC = Float.parseFloat(sss);
+            try {
+                String sss = s.toString();
+                FragmentDataShare.phaseTBebanC = Float.parseFloat(sss);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 

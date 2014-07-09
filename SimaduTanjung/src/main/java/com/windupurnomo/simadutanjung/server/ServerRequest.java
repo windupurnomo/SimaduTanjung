@@ -23,6 +23,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import android.util.Log;
 
+import com.windupurnomo.simadutanjung.entities.CommonResponse;
 import com.windupurnomo.simadutanjung.entities.Gardu;
 
 public class ServerRequest {
@@ -44,8 +45,9 @@ public class ServerRequest {
         StringBuilder stringBuilder = new StringBuilder();
         try {
             HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, 3000);
-            HttpConnectionParams.setSoTimeout(params, 3000);
+            int timeout = 10000;//3000
+            HttpConnectionParams.setConnectionTimeout(params, timeout);
+            HttpConnectionParams.setSoTimeout(params, timeout);
             httpClient = new DefaultHttpClient(params);
             Log.d(TAG, "executing...");
             HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -68,7 +70,7 @@ public class ServerRequest {
     }
 
     /* Mengirimkan POST request 	 */
-    public int sendPostRequest(Gardu gardu, String url){
+    public CommonResponse sendPostRequest(Gardu gardu, String url){
         int replyCode = 99;
         HttpClient httpClient;
         HttpPost post = new HttpPost(this.serverUri+"/"+url);
@@ -81,23 +83,35 @@ public class ServerRequest {
         value.add(new BasicNameValuePair("daya", Float.toString(gardu.getDaya())));
         value.add(new BasicNameValuePair("penyulang", gardu.getPenyulang()));
         value.add(new BasicNameValuePair("tiang", Integer.toString(gardu.getTiang())));
-
+        InputStream is = null;
+        StringBuilder stringBuilder = new StringBuilder();
         try {
             HttpParams params = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(params, 3000);
-            HttpConnectionParams.setSoTimeout(params, 3000);
+            int timeout = 10000;//3000
+            HttpConnectionParams.setConnectionTimeout(params, timeout);
+            HttpConnectionParams.setSoTimeout(params, timeout);
             httpClient = new DefaultHttpClient(params);
             post.setEntity(new UrlEncodedFormEntity(value));
             Log.d(TAG, "executing post...");
             HttpResponse httpResponse = httpClient.execute(post);
             StatusLine status = httpResponse.getStatusLine();
             if(status.getStatusCode() == HttpStatus.SC_OK){
+                HttpEntity httpEntity = httpResponse.getEntity();
+                is = httpEntity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line = null;
+                while((line = reader.readLine()) != null){
+                    stringBuilder.append(line+"\n");
+                }
+                is.close();
+
                 Log.d(TAG, "submitted sucessfully...");
                 replyCode = status.getStatusCode();
             }
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
-        return replyCode;
+
+        return new CommonResponse(replyCode, stringBuilder.toString());
     }
 }

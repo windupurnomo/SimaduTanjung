@@ -3,7 +3,6 @@
 
     <string name="app_name">Simadu Tanjung</string>
     <string name="hello_world">Hello world!</string>
-
     <string name="title_arus_phaser">Phase R</string>
     <string name="title_arus_phases">Phase S</string>
     <string name="title_arus_phaset">Phase T</string>
@@ -12,7 +11,6 @@
     <string name="title_arus_nh">NH</string>
     <string name="title_arus_beban">Beban</string>
     <string name="title_arus_satuan">A</string>
-
     <string name="title_tegangan_rn">R - N</string>
     <string name="title_tegangan_sn">S - N</string>
     <string name="title_tegangan_tn">T - N</string>
@@ -21,12 +19,10 @@
     <string name="title_tegangan_rt">R - T</string>
     <string name="title_tegangan_tiangujung">No. Tiang Ujung</string>
     <string name="title_tegangan_satuan">V</string>
-
     <string name="line_a">Line A</string>
     <string name="line_b">Line B</string>
     <string name="line_c">Line C</string>
     <string name="line_d">Line D</string>
-
     <string name="action_settings">Settings</string>
     <string name="title_activity_editor">Editor</string>
     <string name="title_activity_data_list">DataList</string>
@@ -37,9 +33,9 @@
     <string name="option_menu_save">Save</string>
     <string name="action_menu_edit">Edit</string>
     <string name="action_menu_delete">Delete</string>
-    <string name="tv_nomor">Nomor:</string>
+    <string name="tv_nomor">Nomor Gardu:</string>
     <string name="tv_address">Alamat:</string>
-    <string name="tv_daya">Daya:</string>
+    <string name="tv_daya">Daya (kVA):</string>
     <string name="tv_penyulang">Penyulang:</string>
     <string name="tv_tiang">Konstruksi Tiang:</string>
     <string name="hint_nomor">Nomor Gardu</string>
@@ -47,10 +43,12 @@
     <string name="hint_daya">Daya (kVA)</string>
     <string name="hint_penyulang">Penyulang</string>
     <string name="hint_tiang">Konstruksi Tiang</string>
-
     <string name="title_activity_detail_gardu">DetailGardu</string>
     <string name="title_activity_measurement">Pengukuran</string>
     <string name="title_tegangan_ujung">TEGANGAN UJUNG</string>
     <string name="title_tegangan_pangkal">TEGANGAN PANGKAL</string>
     <string name="title_arus_total">ARUS TOTAL</string>
+    <string name="title_activity_measurement_analysis">Analysis</string>
+    <string name="action_menu_measurement">Pengukuran</string>
+
 </resources>

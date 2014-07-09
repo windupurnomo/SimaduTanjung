@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +50,7 @@ import com.windupurnomo.simadutanjung.server.ServerRequest;
 import com.windupurnomo.simadutanjung.util.NetworkUtil;
 
 public class Home extends Activity implements OnQueryTextListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "Home";
     private static final String PREFS_NAME = "ListGardu";
     private static final String List_Gardu = "ObjectListGardu";
     private final int APP_THEME = R.array.blood;
@@ -85,8 +87,8 @@ public class Home extends Activity implements OnQueryTextListener {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                //getMenuInflater().inflate(R.menu.activity_home_action, menu);
-                getMenuInflater().inflate(R.menu.context_menu_gardu, menu);
+                getMenuInflater().inflate(R.menu.activity_home_action, menu);
+                //getMenuInflater().inflate(R.menu.context_menu_gardu, menu);
                 return true;
             }
 
@@ -99,27 +101,8 @@ public class Home extends Activity implements OnQueryTextListener {
                     case R.id.action_menu_delete:
                         delete();
                         break;
-                    case R.id.ctx_edit_gardu:
-                        showUpdateForm();
-                        break;
-                    case R.id.ctx_delete_gardu:
-                        delete();
-                        break;
-                    case R.id.ctx_day1_gardu:
+                    case R.id.action_menu_measurement:
                         showMeasurementForm(1);
-                        break;
-                    case R.id.ctx_day2_gardu:
-                        showMeasurementForm(2);
-                        break;
-                    case R.id.ctx_day3_gardu:
-                        showMeasurementForm(3);
-                        break;
-                    case R.id.ctx_analisis_gardu:
-                        Toast.makeText(Home.this, "Analisis", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.ctx_analisis_gardu3:
-                        Toast.makeText(Home.this, "Analisis 3 Hari", Toast.LENGTH_LONG).show();
-                        break;
                 }
                 mode.finish();
                 return false;
@@ -138,6 +121,7 @@ public class Home extends Activity implements OnQueryTextListener {
         in.putExtra("daya", selectedList.getDaya());
         in.putExtra("penyulang", selectedList.getPenyulang());
         in.putExtra("tiang", selectedList.getTiang());
+        in.putExtra("theme", APP_THEME);
         startActivity(in);
     }
 
@@ -147,6 +131,7 @@ public class Home extends Activity implements OnQueryTextListener {
         in.putExtra("garduNo", selectedList.getNomor());
         in.putExtra("garduId", selectedList.getId());
         in.putExtra("measurementNumber", number);
+        in.putExtra("daya", selectedList.getDaya());
         startActivity(in);
     }
 
@@ -159,6 +144,12 @@ public class Home extends Activity implements OnQueryTextListener {
                 new MainActivityAsync().execute("delete");
                 list.remove(list.indexOf(selectedList));
                 Toast.makeText(getApplicationContext(), "deleted", Toast.LENGTH_SHORT).show();
+                //remove sharedpreference
+                String spName = "DataMeasurement-" + selectedList.getNomor();
+                SharedPreferences sp1 = getSharedPreferences(spName+1 , Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp1.edit();
+                editor.clear();
+                editor.commit();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -234,6 +225,12 @@ public class Home extends Activity implements OnQueryTextListener {
 
     private void populateListView(){
         adapter = new ListAdapterGardu(getApplicationContext(), list);
+        Collections.sort(list, new Comparator<Gardu>() {
+            public int compare(Gardu o1, Gardu o2) {
+                return o1.getNomor().compareTo(o2.getNomor());
+            }
+        });
+
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 

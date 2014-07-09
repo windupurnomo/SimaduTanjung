@@ -1,12 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/option_menu_analisis"
+        android:icon="@drawable/ic_action_cloud"
+        android:title="Analisis"
+        android:showAsAction="ifRoom|withText"/>
+    <item
         android:id="@+id/option_menu_save"
         android:icon="@drawable/ic_action_save"
         android:title="Save"
         android:showAsAction="ifRoom|withText"/>
     <item
+        android:id="@+id/option_menu_upload"
+        android:icon="@drawable/ic_action_upload"
+        android:title="Upload"
+        android:showAsAction="ifRoom|withText"/>
+    <item
         android:id="@+id/option_menu_publish"
-        android:icon="@drawable/ic_action_cloud"
+        android:icon="@drawable/ic_action_web_site"
         android:title="Publish"
         android:showAsAction="ifRoom|withText"/>
 </menu>
