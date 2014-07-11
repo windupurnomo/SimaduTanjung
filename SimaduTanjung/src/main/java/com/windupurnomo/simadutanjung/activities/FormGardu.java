@@ -120,9 +120,11 @@ public class FormGardu extends ActionBarActivity {
                 break;
 
             case R.id.option_menu_save_gardu:
-                if(textNomor.getText().toString().trim().isEmpty() || textAddress.getText().toString().trim().isEmpty()){
+                if(textNomor.getText().toString().trim().isEmpty()){
                     Toast.makeText(getApplicationContext(), "Nomor gardu tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                }else{
+                } else if(textDaya.getText().toString().trim().isEmpty())
+                    Toast.makeText(getApplicationContext(), "Daya tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                else{
                     new FormGarduAsync().execute();
                 }
                 break;

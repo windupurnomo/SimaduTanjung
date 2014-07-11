@@ -50,7 +50,7 @@ public class MeasurementService {
         StringBuilder stringBuilder = new StringBuilder();
         try {
             HttpParams params = new BasicHttpParams();
-            int timeout = 10000;//3000
+            int timeout = 5000;//3000
             HttpConnectionParams.setConnectionTimeout(params, timeout);
             HttpConnectionParams.setSoTimeout(params, timeout);
             httpClient = new DefaultHttpClient(params);

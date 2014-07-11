@@ -625,6 +625,7 @@ public class MeasurementActivity extends ActionBarActivity {
                 initFragmentDataShare(obj);
             }
         } catch (JSONException e) {
+            FragmentDataShare.id = 0;
             FragmentDataShare.garduId = idGardu;
             Log.d(TAG, e.getMessage());
         }
@@ -642,13 +643,12 @@ public class MeasurementActivity extends ActionBarActivity {
             editor.putString(MeasurementVariableName.garduName, noGardu);
             editor.putBoolean(MeasurementVariableName.dataStatus, false);
             editor.commit();
-            Toast.makeText(MeasurementActivity.this, "Saving to internet.\nLocal storage will be deleted." , Toast.LENGTH_LONG).show();
+            Toast.makeText(MeasurementActivity.this, "Saving to internet." , Toast.LENGTH_LONG).show();
         } else{
             Toast.makeText(MeasurementActivity.this, "Upload Gagal. Code: " +replyCode , Toast.LENGTH_LONG).show();
         }
         goToHomeActivity();
     }
-
 
     private class MeasurementActivityAsync extends AsyncTask<String, Void, String> {
         private String processType;

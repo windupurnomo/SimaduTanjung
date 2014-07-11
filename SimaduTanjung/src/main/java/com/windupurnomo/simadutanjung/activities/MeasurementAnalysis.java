@@ -114,7 +114,7 @@ public class MeasurementAnalysis extends ActionBarActivity {
             float bebanTrafox = (FragmentDataShare.rn * FragmentDataShare.phaseR +
                     FragmentDataShare.sn * FragmentDataShare.phaseS +
                     FragmentDataShare.tn * FragmentDataShare.phaseT) / 1000;
-            float persenBebanx = (bebanTrafox/1000)/daya * 100;
+            float persenBebanx = (bebanTrafox/daya) * 100;
             MeasurementAnalysis ma = new MeasurementAnalysis();
             float maxBebanA = ma.getMax(FragmentDataShare.phaseRBebanA,
                     FragmentDataShare.phaseSBebanA, FragmentDataShare.phaseTBebanA);
